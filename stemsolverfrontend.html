@@ -5,18 +5,34 @@
   <title>Sigma STEM</title>
   <style>
     * {
-      font-family: Bahnschrift, 'DIN Alternate', 'Franklin Gothic Medium', 'Nimbus Sans Narrow', sans-serif-condensed, sans-serif;
+      font-family: Bahnschrift, sans-serif;
       box-sizing: border-box;
     }
+
+    :root {
+      --bg-dark: #0d0d0d;
+      --bg-light: #ffffff;
+      --text-dark: #4CAF50;
+      --text-light: #0d0d0d;
+      --border-dark: #4CAF50;
+    }
+
     body {
-      background-color: black;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 40px;
-      color: #4CAF50;
+      transition: background-color 0.3s, color 0.3s;
     }
+
+    body.light-mode {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+    }
+
     header {
       background-color: black;
       color: #4CAF50;
@@ -25,82 +41,103 @@
       border: 5px solid #4CAF50;
       padding: 10px 20px;
       margin-bottom: 30px;
-      width: fit-content;
     }
+
     .equation-box {
-      width: fit-content;
+      background-color: black;
+      border: 5px solid #4CAF50;
+      border-radius: 10px;
       padding: 20px;
       margin: 20px auto;
-      border: 5px solid #4CAF50;
-      border-radius: 10px;
       text-align: center;
-      background-color: black;
       color: #4CAF50;
-    }
-    .equation-text-box,
-    .Submit {
       width: 100%;
-      padding: 10px 16px;
-      font-size: 1.2rem;
-      color: #4CAF50;
+      max-width: 500px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.light-mode .equation-box {
+      background-color: white;
+      color: #0d0d0d;
+      border-color: #0d0d0d;
+    }
+
+    input, button, .Submit {
+      width: 100%;
+      padding: 10px;
+      font-size: 1.1rem;
+      border: 2px solid #4CAF50;
       background-color: black;
-      border: 5px solid #4CAF50;
+      color: #4CAF50;
       border-radius: 5px;
       margin: 10px 0;
       cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
     }
-    .equation-text-box:hover,
-    .Submit:hover {
+
+    body.light-mode input,
+    body.light-mode button {
+      background-color: white;
+      color: #0d0d0d;
+      border-color: #0d0d0d;
+    }
+
+    input:hover,
+    button:hover {
       background-color: #144d14;
     }
+
+    body.light-mode input:hover,
+    body.light-mode button:hover {
+      background-color: #e0e0e0;
+    }
+
     label {
-      color: #4CAF50;
+      display: block;
+      margin-bottom: 5px;
       font-size: 1.1rem;
     }
+
     #drop-area {
       border: 3px dashed #4CAF50;
-      border-radius: 10px;
       padding: 20px;
-      text-align: center;
-      color: #4CAF50;
+      border-radius: 10px;
       cursor: pointer;
-      margin: 10px 0;
       transition: background-color 0.3s, border-color 0.3s;
     }
+
     #drop-area.dragover {
-      background-color: #0d0d0d;
+      background-color: #222;
       border-color: white;
     }
+
     #image-preview {
-      max-width: 300px;
+      max-width: 100%;
       max-height: 200px;
       display: none;
-      margin: 15px auto 0;
+      margin: 10px auto;
       border: 2px solid #4CAF50;
       border-radius: 5px;
     }
-    #file-name {
-      color: #4CAF50;
-      font-size: 1rem;
-      text-align: center;
-      margin-top: 5px;
-    }
-    #image {
-      display: none;
-    }
+
     #chat-box {
-      background-color: black;
       border: 2px solid #4CAF50;
       border-radius: 5px;
+      background-color: #000;
       padding: 10px;
+      color: #4CAF50;
       max-height: 300px;
       overflow-y: auto;
       text-align: left;
       white-space: pre-wrap;
-      margin-bottom: 10px;
-      width: 400px;
+      width: 100%;
       min-height: 100px;
-      font-size: 1.1rem;
+    }
+
+    body.light-mode #chat-box {
+      background-color: #f1f1f1;
+      color: #0d0d0d;
+      border-color: #0d0d0d;
     }
   </style>
 </head>
@@ -108,47 +145,69 @@
   <header>
     <h1>Sigma STEM</h1>
     <p>An AI-powered math & science application.</p>
+    <button id="toggle-theme" class="Submit">Toggle Theme</button>
   </header>
 
-  <!-- Equation Input Form -->
   <div class="equation-box">
     <form id="equation-form">
-      <label for="equation">Enter Equation Below</label><br />
-      <input class="equation-text-box" type="text" id="equation" name="equation" placeholder="e.g., f(5); f=x+7^2" required />
-      <br />
-      <label for="extra-details">Enter Extra Details Below (optional)</label>
-      <input type="text" class="equation-text-box" id="extra-details" name="extra-details" placeholder="e.g., it's a polynomial function" />
-      <br />
+      <label for="equation">Enter Equation:</label>
+      <input type="text" id="equation" placeholder="e.g., f(x) = x^2 + 3" required />
+      <label for="extra-details">Extra Details (optional):</label>
+      <input type="text" id="extra-details" placeholder="e.g., It's a polynomial." />
       <button class="Submit" type="submit">Submit Equation</button>
     </form>
   </div>
 
-  <!-- Image Upload Form -->
   <div class="equation-box">
     <form id="image-form" enctype="multipart/form-data">
-      <label for="image">Upload an Image</label>
-      <div id="drop-area">Drag & Drop Image Here or Click to Choose</div>
-      <input type="file" name="image" id="image" accept="image/*" required />
+      <label>Upload Image:</label>
+      <div id="drop-area">Click or Drag an Image Here</div>
+      <input type="file" id="image" accept="image/*" hidden />
       <p id="file-name"></p>
-      <img id="image-preview" alt="Image Preview" />
+      <img id="image-preview" alt="Preview" />
       <button class="Submit" type="submit">Submit Image</button>
     </form>
   </div>
 
-  <!-- Answer Display Box -->
   <div class="equation-box">
-    <div id="chat-box">AI answer will appear here after submitting.</div>
+    <div id="chat-box">AI answer will appear here.</div>
   </div>
 
-<script>
-  const imageInput = document.getElementById('image');
-  const fileNameDisplay = document.getElementById('file-name');
-  const previewImage = document.getElementById('image-preview');
-  const dropArea = document.getElementById('drop-area');
-  const chatBox = document.getElementById('chat-box');
+  <script>
+    // Theme Toggle Logic
+    const toggleThemeBtn = document.getElementById('toggle-theme');
+    toggleThemeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+    });
 
-  function handleFile(file) {
-    if (file && file.type.startsWith('image/')) {
+    const imageInput = document.getElementById('image');
+    const dropArea = document.getElementById('drop-area');
+    const fileNameDisplay = document.getElementById('file-name');
+    const previewImage = document.getElementById('image-preview');
+    const chatBox = document.getElementById('chat-box');
+
+    dropArea.addEventListener('click', () => imageInput.click());
+    dropArea.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropArea.classList.add('dragover');
+    });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+    dropArea.addEventListener('drop', e => {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        imageInput.files = e.dataTransfer.files;
+        previewAndSetFile(file);
+      }
+    });
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      previewAndSetFile(file);
+    });
+
+    function previewAndSetFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
       fileNameDisplay.textContent = file.name;
       const reader = new FileReader();
       reader.onload = e => {
@@ -156,93 +215,55 @@
         previewImage.style.display = 'block';
       };
       reader.readAsDataURL(file);
-    } else {
-      previewImage.style.display = 'none';
-      fileNameDisplay.textContent = 'Invalid file';
     }
-  }
 
-  dropArea.addEventListener('click', () => imageInput.click());
-  dropArea.addEventListener('dragover', e => {
-    e.preventDefault();
-    dropArea.classList.add('dragover');
-  });
-  dropArea.addEventListener('dragleave', () => {
-    dropArea.classList.remove('dragover');
-  });
-  dropArea.addEventListener('drop', e => {
-    e.preventDefault();
-    dropArea.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      imageInput.files = e.dataTransfer.files;
-      handleFile(file);
+    async function sendChatMessage(prompt) {
+      chatBox.textContent = 'Thinking...';
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'gpt-4',
+            messages: [
+              { role: 'system', content: 'You are a helpful AI for math and science questions.' },
+              { role: 'user', content: prompt }
+            ]
+          })
+        });
+
+        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+        const data = await response.json();
+        chatBox.textContent = data.choices?.[0]?.message?.content || 'No response.';
+      } catch (err) {
+        chatBox.textContent = `Error: ${err.message}`;
+      }
     }
-  });
-  imageInput.addEventListener('change', () => {
-    const file = imageInput.files[0];
-    handleFile(file);
-  });
 
-  async function sendChatMessage(prompt) {
-    chatBox.textContent = "Thinking...";
+    document.getElementById('equation-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const eq = document.getElementById('equation').value.trim();
+      const extra = document.getElementById('extra-details').value.trim();
+      const prompt = `${eq}${extra ? "\nAdditional info: " + extra : ''}`;
+      sendChatMessage(prompt);
+    });
 
-    try {
-      const response = await fetch('http://127.0.0.1:8000/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'gpt-4',
-          messages: [
-            { role: 'system', content: 'You are a helpful assistant answering math and science questions clearly and step-by-step.' },
-            { role: 'user', content: prompt }
-          ]
-        })
-      });
-
-      if (!response.ok) {
-        chatBox.textContent = `Error: ${response.status} ${response.statusText}`;
+    document.getElementById('image-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const file = imageInput.files[0];
+      if (!file) {
+        alert('Please select an image.');
         return;
       }
-
-      const data = await response.json();
-      const reply = data.choices?.[0]?.message?.content || 'Error: No response.';
-      chatBox.textContent = reply;
-    } catch (err) {
-      chatBox.textContent = `Error: ${err.message}`;
-    }
-  }
-
-  // Handle equation form submission
-  document.getElementById('equation-form').addEventListener('submit', async e => {
-    e.preventDefault();
-    const eq = document.getElementById('equation').value.trim();
-    const extra = document.getElementById('extra-details').value.trim();
-    if (!eq) {
-      alert('Please enter an equation.');
-      return;
-    }
-    let prompt = eq;
-    if (extra) prompt += "\nAdditional info: " + extra;
-    await sendChatMessage(prompt);
-  });
-
-  // Handle image form submission
-  document.getElementById('image-form').addEventListener('submit', async e => {
-    e.preventDefault();
-    const file = imageInput.files[0];
-    if (!file) {
-      alert('Please select an image.');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const base64Image = event.target.result;
-      const prompt = `Please analyze this image and answer the question.\nImage data:\n${base64Image}`;
-      await sendChatMessage(prompt);
-    };
-    reader.readAsDataURL(file);
-  });
-</script>
+      const reader = new FileReader();
+      reader.onload = event => {
+        const base64 = event.target.result;
+        const prompt = `Please analyze this image:\n${base64}`;
+        sendChatMessage(prompt);
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
 </body>
 </html>
+
