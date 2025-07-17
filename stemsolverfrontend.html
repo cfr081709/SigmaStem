@@ -15,6 +15,7 @@
       --text-dark: #4CAF50;
       --text-light: #0d0d0d;
       --border-dark: #4CAF50;
+      --border-light: #0d0d0d;
     }
 
     body {
@@ -35,51 +36,58 @@
 
     header {
       background-color: black;
-      color: #4CAF50;
+      color: var(--text-dark);
       text-align: center;
       border-radius: 10px;
-      border: 5px solid #4CAF50;
+      border: 5px solid var(--border-dark);
       padding: 10px 20px;
       margin-bottom: 30px;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    body.light-mode header {
+      background-color: white;
+      color: var(--text-light);
+      border-color: var(--border-light);
     }
 
     .equation-box {
       background-color: black;
-      border: 5px solid #4CAF50;
+      border: 5px solid var(--border-dark);
       border-radius: 10px;
       padding: 20px;
       margin: 20px auto;
       text-align: center;
-      color: #4CAF50;
+      color: var(--text-dark);
       width: 100%;
       max-width: 500px;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     }
 
     body.light-mode .equation-box {
       background-color: white;
-      color: #0d0d0d;
-      border-color: #0d0d0d;
+      color: var(--text-light);
+      border-color: var(--border-light);
     }
 
-    input, button, .Submit {
+    input, button {
       width: 100%;
       padding: 10px;
       font-size: 1.1rem;
-      border: 2px solid #4CAF50;
+      border: 2px solid var(--border-dark);
       background-color: black;
-      color: #4CAF50;
+      color: var(--text-dark);
       border-radius: 5px;
       margin: 10px 0;
       cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     }
 
     body.light-mode input,
     body.light-mode button {
       background-color: white;
-      color: #0d0d0d;
-      border-color: #0d0d0d;
+      color: var(--text-light);
+      border-color: var(--border-light);
     }
 
     input:hover,
@@ -99,11 +107,16 @@
     }
 
     #drop-area {
-      border: 3px dashed #4CAF50;
+      border: 3px dashed var(--text-dark);
       padding: 20px;
       border-radius: 10px;
       cursor: pointer;
       transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    body.light-mode #drop-area {
+      border-color: var(--text-light);
+      background-color: #f9f9f9;
     }
 
     #drop-area.dragover {
@@ -116,28 +129,29 @@
       max-height: 200px;
       display: none;
       margin: 10px auto;
-      border: 2px solid #4CAF50;
+      border: 2px solid var(--border-dark);
       border-radius: 5px;
     }
 
     #chat-box {
-      border: 2px solid #4CAF50;
+      border: 2px solid var(--border-dark);
       border-radius: 5px;
-      background-color: #000;
+      background-color: black;
       padding: 10px;
-      color: #4CAF50;
+      color: var(--text-dark);
       max-height: 300px;
       overflow-y: auto;
       text-align: left;
       white-space: pre-wrap;
       width: 100%;
       min-height: 100px;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     }
 
     body.light-mode #chat-box {
       background-color: #f1f1f1;
-      color: #0d0d0d;
-      border-color: #0d0d0d;
+      color: var(--text-light);
+      border-color: var(--border-light);
     }
   </style>
 </head>
@@ -174,9 +188,8 @@
   </div>
 
   <script>
-    // Theme Toggle Logic
-    const toggleThemeBtn = document.getElementById('toggle-theme');
-    toggleThemeBtn.addEventListener('click', () => {
+    // Theme toggle
+    document.getElementById('toggle-theme').addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
     });
 
@@ -186,6 +199,7 @@
     const previewImage = document.getElementById('image-preview');
     const chatBox = document.getElementById('chat-box');
 
+    // Drag and drop file logic
     dropArea.addEventListener('click', () => imageInput.click());
     dropArea.addEventListener('dragover', e => {
       e.preventDefault();
@@ -201,6 +215,7 @@
         previewAndSetFile(file);
       }
     });
+
     imageInput.addEventListener('change', () => {
       const file = imageInput.files[0];
       previewAndSetFile(file);
@@ -263,6 +278,10 @@
       };
       reader.readAsDataURL(file);
     });
+  </script>
+</body>
+</html>
+
   </script>
 </body>
 </html>
