@@ -27,6 +27,7 @@
       justify-content: center;
       padding: 40px;
       transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
     }
 
     body.light-mode {
@@ -35,14 +36,18 @@
     }
 
     header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       background-color: black;
       color: var(--text-dark);
-      text-align: center;
       border-radius: 10px;
       border: 5px solid var(--border-dark);
       padding: 10px 20px;
       margin-bottom: 30px;
-      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      transition: all 0.3s;
+      width: 100%;
+      max-width: 500px;
     }
 
     body.light-mode header {
@@ -51,17 +56,55 @@
       border-color: var(--border-light);
     }
 
+    #logo {
+      width: 200px;
+      filter: brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(400%) hue-rotate(75deg);
+      transition: filter 0.3s;
+      margin-bottom: 15px;
+    }
+
+    body.light-mode #logo {
+      filter: none;
+    }
+
+    #toggle-theme {
+      cursor: pointer;
+      background-color: transparent;
+      border: 2px solid var(--border-dark);
+      color: var(--text-dark);
+      padding: 8px 15px;
+      font-size: 1rem;
+      border-radius: 5px;
+      transition: all 0.3s;
+      width: 100%;
+      max-width: 200px;
+    }
+
+    body.light-mode #toggle-theme {
+      border-color: var(--border-light);
+      color: var(--text-light);
+    }
+
+    #toggle-theme:hover {
+      background-color: #144d14;
+      color: white;
+    }
+
+    body.light-mode #toggle-theme:hover {
+      background-color: #e0e0e0;
+      color: var(--text-light);
+    }
+
     .equation-box {
       background-color: black;
       border: 5px solid var(--border-dark);
       border-radius: 10px;
       padding: 20px;
       margin: 20px auto;
-      text-align: center;
       color: var(--text-dark);
       width: 100%;
       max-width: 500px;
-      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      transition: all 0.3s;
     }
 
     body.light-mode .equation-box {
@@ -70,7 +113,13 @@
       border-color: var(--border-light);
     }
 
-    input, button {
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    input[type="text"], input[type="file"], button {
       width: 100%;
       padding: 10px;
       font-size: 1.1rem;
@@ -78,32 +127,29 @@
       background-color: black;
       color: var(--text-dark);
       border-radius: 5px;
-      margin: 10px 0;
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      margin: 10px 0 15px 0;
+      transition: all 0.3s;
+      box-sizing: border-box;
     }
 
-    body.light-mode input,
+    body.light-mode input[type="text"],
+    body.light-mode input[type="file"],
     body.light-mode button {
       background-color: white;
       color: var(--text-light);
       border-color: var(--border-light);
     }
 
-    input:hover,
+    input[type="text"]:hover,
     button:hover {
       background-color: #144d14;
+      color: white;
     }
 
-    body.light-mode input:hover,
+    body.light-mode input[type="text"]:hover,
     body.light-mode button:hover {
       background-color: #e0e0e0;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 1.1rem;
+      color: var(--text-light);
     }
 
     #drop-area {
@@ -111,41 +157,64 @@
       padding: 20px;
       border-radius: 10px;
       cursor: pointer;
+      text-align: center;
       transition: background-color 0.3s, border-color 0.3s;
+      user-select: none;
+      color: var(--text-dark);
     }
 
     body.light-mode #drop-area {
       border-color: var(--text-light);
       background-color: #f9f9f9;
+      color: var(--text-light);
     }
 
     #drop-area.dragover {
       background-color: #222;
       border-color: white;
+      color: var(--text-light);
+    }
+
+    #file-name {
+      text-align: center;
+      font-style: italic;
+      margin: 5px 0 10px 0;
+      color: var(--text-dark);
+      word-break: break-word;
+    }
+
+    body.light-mode #file-name {
+      color: var(--text-light);
     }
 
     #image-preview {
       max-width: 100%;
       max-height: 200px;
       display: none;
-      margin: 10px auto;
+      margin: 10px auto 15px auto;
       border: 2px solid var(--border-dark);
       border-radius: 5px;
+      object-fit: contain;
+      transition: all 0.3s;
+    }
+
+    body.light-mode #image-preview {
+      border-color: var(--border-light);
     }
 
     #chat-box {
       border: 2px solid var(--border-dark);
       border-radius: 5px;
       background-color: black;
-      padding: 10px;
+      padding: 15px;
       color: var(--text-dark);
       max-height: 300px;
       overflow-y: auto;
-      text-align: left;
       white-space: pre-wrap;
       width: 100%;
       min-height: 100px;
-      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      transition: all 0.3s;
+      font-size: 1.1rem;
     }
 
     body.light-mode #chat-box {
@@ -156,19 +225,21 @@
   </style>
 </head>
 <body>
+
   <header>
-    <h1>Sigma STEM</h1>
-    <p>An AI-powered math & science application.</p>
-    <button id="toggle-theme" class="Submit">Toggle Theme</button>
+    <img id="logo" src="siguma_logo.png" alt="Sigma STEM Logo" />
+    <button id="toggle-theme">Toggle Theme</button>
   </header>
 
   <div class="equation-box">
     <form id="equation-form">
       <label for="equation">Enter Equation:</label>
       <input type="text" id="equation" placeholder="e.g., f(x) = x^2 + 3" required />
+      
       <label for="extra-details">Extra Details (optional):</label>
       <input type="text" id="extra-details" placeholder="e.g., It's a polynomial." />
-      <button class="Submit" type="submit">Submit Equation</button>
+      
+      <button type="submit">Submit Equation</button>
     </form>
   </div>
 
@@ -178,8 +249,8 @@
       <div id="drop-area">Click or Drag an Image Here</div>
       <input type="file" id="image" accept="image/*" hidden />
       <p id="file-name"></p>
-      <img id="image-preview" alt="Preview" />
-      <button class="Submit" type="submit">Submit Image</button>
+      <img id="image-preview" alt="Image Preview" />
+      <button type="submit">Submit Image</button>
     </form>
   </div>
 
@@ -188,18 +259,19 @@
   </div>
 
   <script>
-    // Theme toggle
-    document.getElementById('toggle-theme').addEventListener('click', () => {
+    // Theme toggle logic
+    const toggleThemeBtn = document.getElementById('toggle-theme');
+    toggleThemeBtn.addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
     });
 
+    // Image input & drag & drop
     const imageInput = document.getElementById('image');
     const dropArea = document.getElementById('drop-area');
     const fileNameDisplay = document.getElementById('file-name');
     const previewImage = document.getElementById('image-preview');
     const chatBox = document.getElementById('chat-box');
 
-    // Drag and drop file logic
     dropArea.addEventListener('click', () => imageInput.click());
     dropArea.addEventListener('dragover', e => {
       e.preventDefault();
@@ -232,29 +304,38 @@
       reader.readAsDataURL(file);
     }
 
+    // Backend URL — adjust if backend runs elsewhere or port changes
+    const BACKEND_URL = 'http://127.0.0.1:8000/api/chat';
+
     async function sendChatMessage(prompt) {
       chatBox.textContent = 'Thinking...';
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/chat', {
+        const response = await fetch(BACKEND_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            model: 'gpt-4',
             messages: [
               { role: 'system', content: 'You are a helpful AI for math and science questions.' },
               { role: 'user', content: prompt }
             ]
-          })
+          }),
+          mode: 'cors' // important for cross-origin requests
         });
 
-        if (!response.ok) throw new Error(`Server Error: ${response.status}`);
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Server error ${response.status}: ${errorText || response.statusText}`);
+        }
+
         const data = await response.json();
         chatBox.textContent = data.choices?.[0]?.message?.content || 'No response.';
       } catch (err) {
-        chatBox.textContent = `Error: ${err.message}`;
+        chatBox.textContent = `Error: ${err.message}\nMake sure backend is running at ${BACKEND_URL} and CORS is configured.`;
+        console.error('Fetch error:', err);
       }
     }
 
+    // Equation form submit
     document.getElementById('equation-form').addEventListener('submit', e => {
       e.preventDefault();
       const eq = document.getElementById('equation').value.trim();
@@ -263,6 +344,7 @@
       sendChatMessage(prompt);
     });
 
+    // Image form submit
     document.getElementById('image-form').addEventListener('submit', e => {
       e.preventDefault();
       const file = imageInput.files[0];
@@ -281,6 +363,7 @@
   </script>
 </body>
 </html>
+
 
   </script>
 </body>
