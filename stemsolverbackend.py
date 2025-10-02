@@ -18,7 +18,7 @@ app.add_middleware(
 logging.basicConfig(level=logging.INFO)
 
 # Use environment variable or fallback
-HF_API_KEY = os.getenv("HF_API_KEY") or "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"
+HF_API_KEY = 
 HF_MODEL = "gpt2"  # Use a known public model for testing
 
 if not HF_API_KEY:
